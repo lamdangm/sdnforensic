@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Event Detail</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="/static/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="/static/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/bower_components/pnotify/css/pnotify.css" rel="stylesheet"/>
+
+    <link href="/static/bower_components/pnotify/css/pnotify.css" rel="stylesheet"/>
+
+</head>
+<body>
+<div id="wrapper">
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="page-header">Event Detail</h3>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <!-- /.content-->
+                <div class="col-lg-5">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <i class="fa fa-info fa-fw"></i>Switch Detail
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+                            <table class="table table-hover">
+
+
+                                <tr>
+                                    <td><b>MAC</b></td>
+                                    <td>: <span id="dpid"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+
+
+                <div class="col-lg-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <i class="fa fa-info fa-fw"></i> Flow Summary
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <table class="table table-hover">
+
+                                <tr>
+                                    <td><b> Flow Count</b></td>
+                                    <td>: <span id="flowCount"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Packet Count</b></td>
+                                    <td>: <span id="packet_count"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Byte</b></td>
+                                    <td>: <span id="byte_count"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Flag</b></td>
+                                    <td>: <span id="flags"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Buffer</b></td>
+                                    <td>: <span id="bufferCount"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Table Count</b></td>
+                                    <td>: <span id="tableCount"></span></td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+
+
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /#page-wrapper -->
+
+    <div id="login-modal-include"></div>
+
+</div>
+<!-- /#wrapper -->
+<!-- jQuery -->
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/static/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="/static/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+<!-- PNotify -->
+<script src="/static/bower_components/pnotify/pnotify.buttons.js"></script>
+<script src="/static/bower_components/pnotify/pnotify.core.js"></script>
+<script src="/static/bower_components/pnotify/pnotify.nonblock.js"></script>
+
+<script src="/static/js/querystringparser.js"></script>
+
+
+
+<script>
+$.ajax({
+        url: " http://127.0.0.1:5000/databuf",
+        success: function (data) {
+            console.log(data["Event"]);
+
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Hata: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
+        }
+    });
+</script>
+
+</body>
+</html>

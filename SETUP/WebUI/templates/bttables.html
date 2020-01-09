@@ -1,0 +1,275 @@
+<!Doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" rel="stylesheet">
+   
+  </head>
+
+
+  <body>
+    <style>
+      .select,
+      #locale {
+        width: 100%;
+      }
+      .like {
+        margin-right: 10px;
+      }
+      #Filter-Group{
+        width: 50%;
+      }
+    </style>
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-md-4" style="background-color: rgba(184, 229, 250, 0.5);">
+      <form id="filter-form">
+        <label for="Filter-Group">Filter-Panel</label>
+          <select class="form-control" id="Filter-Group" name="filter-selector">
+          <option value="Diagnostic">Diagnostic Data</option>
+          <option Value="SwitchData">Switch Data </option>
+          <option Value="HostData">Host Tracking Data</option>
+        </select>
+        <br>
+        <div id="input-timestamp">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Begin Time</span>
+            </div>
+            <input type="datatime-local" class="form-control" name="tsbegin" placeholder="DD/MM/YYYY" aria-label="BeginTime" aria-describedby="BeginTimeAddons">
+          </div> 
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">End Time</span>
+            </div>
+            <input type="datatime-local" class="form-control" name="tsend" placeholder="DD/MM/YYYY" aria-label="EndTime" aria-describedby="EndTimeAddons">
+          </div> 
+        </div>
+        <br>
+          <button type="datetime-local" class="btn btn-primary">Filter</button>
+        </form>
+        </div>
+    </div>
+    <div class="row">
+      <div class ="col-md-auto">
+        <table
+          id="table"
+          data-locale="en-US"
+          data-toolbar="#toolbar"
+          data-search="true"
+          data-height="700"
+          data-pagination="true"
+          >
+        </table>
+      </div>
+    </div>
+  </div>  
+  </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script src="https://unpkg.com/flexibility@2.0.1/flexibility.js"></script>
+  
+  
+    <script>
+      var $table = $('#table')
+      var $remove = $('#remove')
+      $('#filter-form').submit(function(event){
+        event.preventDefault();
+        //console.log($('#filter-form').serializeArray());
+        
+        //Get Selected Options filter
+        console.log($("#Filter-Group option:selected").val());
+        var select_filter = $("#Filter-Group option:selected").val();
+        if(select_filter == 'Diagnostic'){
+          $table.bootstrapTable('destroy').bootstrapTable({
+            url: 'http://192.168.8.129:5000/search?q=Diagnostic',
+            columns:[
+              [{
+                title: 'Timestamp',
+                field: 'Timestamp',
+                rowspan: 2
+              },{
+                title: 'Events',
+                field: 'Event',
+                rowspan: 2
+              },{
+                title: 'Description',
+                field: 'Description',
+                rowspan: 2
+              },{
+                title: 'Log Type',
+                field: 'Type',
+                rowspan: 2
+              },{
+                title: 'Device Infomation',
+                align: 'center',
+                colspan: 3
+              }],
+              [{
+                field: 'Device.Attachment-Point.SwitchId',
+                title: 'Switch ID',
+                align: 'center',
+              }, {
+                field: 'Device.Attachment-Point.PortNumber',
+                title: 'Port Number',
+                align: 'center'
+              }, {
+                field: 'Device.Attachment-Point.PortMacAddress',
+                title: 'Port MacAddress',
+                align: 'center'
+              }]
+          ]
+          });
+        }
+        if(select_filter == 'SwitchData'){
+          $table.bootstrapTable('destroy').bootstrapTable({
+            url: 'http://192.168.8.129:5000/search?q=SwitchData',
+            columns: [
+              [{
+                title: 'Timestamp',
+                field: 'Timestamp',
+                rowspan: 2
+              },{
+                title: 'Events',
+                field: 'Event',
+                rowspan: 2
+              },{
+                title: 'Description',
+                field: 'Description',
+                rowspan: 2
+              },{
+                title: 'Log Type',
+                field: 'Type',
+                rowspan: 2
+              },{
+                title: 'Switch',
+                align: 'center',
+                colspan: 3
+              }],
+              [{
+                field: 'Switch.DatapathId',
+                title: 'DatapathId',
+                align: 'center',
+              }, {
+                field: 'Switch.Flow',
+                title: 'Flow Stat',
+                align: 'center',
+                formatter: jsonformater
+              }, {
+                field: 'Switch.Port',
+                title: 'Port Desc',
+                align: 'center',
+                formatter: jsonformater
+              }]
+              ]
+          })
+        }
+           if(select_filter == 'HostData'){
+          $table.bootstrapTable('destroy').bootstrapTable({
+            url: 'http://192.168.8.129:5000/search?q=HostData',
+            columns: [
+              [{
+                title: 'Timestamp',
+                field: 'Timestamp',
+                rowspan: 2
+              },{
+                title: 'Events',
+                field: 'Event',
+                rowspan: 2
+              },{
+                title: 'Description',
+                field: 'Description',
+                rowspan: 2
+              },{
+                title: 'Log Type',
+                field: 'Type',
+                rowspan: 2
+              },{
+                title: 'Host Infomation',
+                align: 'center',
+                colspan: 3
+              }],
+              [{
+                field: 'Device.MacAddress',
+                title: 'MacAddress',
+                align: 'center'
+              }, {
+                field: 'Device.Attachment-Point.Last-SwitchID',
+                title: 'Last Seen On Switch',
+                align: 'center'
+              }, {
+                field: 'Device.Attachment-Point.Last-Port-Number',
+                title: 'Last Seem On Port',
+                align: 'center'
+              }]
+              ]
+          })
+        }
+      });
+        //Init Tables
+    /*    $(function() {
+          $table.bootstrapTable({
+            columns: [
+              [{
+                title: 'Timestamp',
+                field: 'Timestamp',
+                rowspan: 2
+              },{
+                title: 'Events',
+                field: 'Event',
+                rowspan: 2
+              },{
+                title: 'Description',
+                field: 'Description',
+                rowspan: 2
+              },{
+                title: 'Log Type',
+                field: 'Type',
+                rowspan: 2
+              },{
+                title: 'Switch',
+                align: 'center',
+                colspan: 3
+              }],
+              [{
+                field: 'Switch.DatapathId',
+                title: 'DatapathId',
+                align: 'center',
+              }, {
+                field: 'Switch.Flow',
+                title: 'Flow Stat',
+                align: 'center',
+                formatter: jsonformater
+              }, {
+                field: 'Switch.Port',
+                title: 'Port Desc',
+                align: 'center',
+                formatter: jsonformater
+              }]
+              ]
+
+          })
+        })*/
+
+        function jsonformater(value){
+            var id_string = JSON.stringify(value)
+            return id_string
+        }
+
+        
+    </script>      
+</html>
+
+
+
+
